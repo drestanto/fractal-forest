@@ -38,11 +38,32 @@ child2 = Fractal((7, "child2"))
 root.add_child(child1)
 root.add_child(child2)
 
-# Print the tree
+# Print the tree structure after initial addition
+print("Initial tree structure:")
 root.print_tree()
 
 # Access the updated value at root
-print(root.value)  # Output will be (22, 'root') after aggregation
+print("Root value after aggregation:", root.value)  # Output will be (12, 'root') after aggregation
+
+# Now update the value of child1, which triggers an update in the parent (root)
+child1.update_value(6)  # New value of child1 is now 6 instead of 5
+
+# Print the tree structure after update
+print("\nTree structure after child1 update:")
+root.print_tree()
+
+# Access the updated value at root after update
+print("Root value after child1 update:", root.value)  # The root value will reflect the change
+
+# Now, simulate updating the value of a non-leaf (root), which triggers the creation of a new child to handle the difference
+root.update_value(30)  # This will change the value of the root from 12 to 30
+
+# Print the tree structure after the new child is created
+print("\nTree structure after root value update:")
+root.print_tree()
+
+# Final root value after the update
+print("Root value after manual update:", root.value)
 ```
 
 ## License
