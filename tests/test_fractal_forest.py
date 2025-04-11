@@ -85,5 +85,65 @@ class TestFractalForest(unittest.TestCase):
 
         root.print_tree()  # This should print the tree structure
 
+    def test_update_leaf_value(self):
+        """Test updating a leaf node and propagating to root."""
+        root = Fractal((0, "root"))
+        leaf = Fractal((5, "leaf"))
+        root.add_child(leaf)
+
+        leaf.update_value(10)
+
+        # Leaf should be updated
+        self.assertEqual(leaf.value[0], 10)
+        # Root should reflect updated leaf
+        self.assertEqual(root.value[0], 10)
+
+    def test_update_nonleaf_value_no_change(self):
+        """Test updating a non-leaf with the same value as sum of children."""
+        root = Fractal((0, "root"))
+        c1 = Fractal((5, "c1"))
+        c2 = Fractal((7, "c2"))
+        root.add_child(c1)
+        root.add_child(c2)
+
+        # Try updating root to 12, which is already the sum of children
+        root.update_value(12)
+
+        # Should remain unchanged (no extra children)
+        self.assertEqual(root.value[0], 12)
+        self.assertEqual(len(root.children), 2)
+
+    def test_update_nonleaf_value_with_change(self):
+        """Test updating a non-leaf with a different value."""
+        root = Fractal((0, "root"))
+        c1 = Fractal((5, "c1"))
+        c2 = Fractal((7, "c2"))
+        root.add_child(c1)
+        root.add_child(c2)
+
+        root.update_value(15)  # diff = 3, expect a new auto-generated child
+
+        self.assertEqual(root.value[0], 15)
+        self.assertEqual(len(root.children), 3)
+
+        # The new child should have value 3 and label "auto-generated"
+        auto_kids = [child for child in root.children if child.value[1] == "auto-generated"]
+        self.assertEqual(len(auto_kids), 1)
+        self.assertEqual(auto_kids[0].value[0], 3)
+
+    def test_integrity_after_updates(self):
+        """Test tree maintains integrity after updates and auto-child creation."""
+        root = Fractal((0, "root"))
+        a = Fractal((4, "A"))
+        b = Fractal((6, "B"))
+        root.add_child(a)
+        root.add_child(b)
+
+        # Force imbalance
+        root.update_value(20)
+
+        # Tree should still pass integrity check
+        self.assertTrue(root.integrity_check())
+
 if __name__ == '__main__':
     unittest.main()
