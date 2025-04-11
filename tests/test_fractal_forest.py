@@ -42,7 +42,7 @@ class TestFractalForest(unittest.TestCase):
         root.add_child(child2)
 
         # Test tree structure
-        self.assertEqual(root.value, (22, "root"))  # The root's value should be (5 + 7 + 10)
+        self.assertEqual(root.value, (5 + 7, "root"))  # The root's value should be (5 + 7)
         self.assertEqual(len(root.children), 2)
         self.assertEqual(child1.value, (5, "child1"))
         self.assertEqual(child2.value, (7, "child2"))
@@ -59,7 +59,7 @@ class TestFractalForest(unittest.TestCase):
         root.add_child(child3)
 
         # After adding three children, root's value should be the sum of all children's values
-        self.assertEqual(root.value, (25, "root"))  # 5 + 7 + 3 + 10 = 25
+        self.assertEqual(root.value, (15, "root"))  # 5 + 7 + 3 = 15
 
     def test_remove_child(self):
         """Test removing a child node from a parent node."""
@@ -72,7 +72,7 @@ class TestFractalForest(unittest.TestCase):
         root.remove_child(child1)
 
         # After removing child1, root's value should be updated
-        self.assertEqual(root.value, (7 + 10, "root"))  # 7 + 10 = 17
+        self.assertEqual(root.value, (7, "root"))  # 7 + 5 - 5 = 7
 
     def test_print_tree(self):
         """Test printing the tree structure."""

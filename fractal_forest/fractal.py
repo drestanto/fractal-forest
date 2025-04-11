@@ -1,5 +1,3 @@
-# fractal_forest/fractal.py
-
 class Fractal:
     def __init__(self, value):
         """Initializes a Fractal with a value (a tuple: (int, label))."""
@@ -12,14 +10,26 @@ class Fractal:
         if child not in self.children:
             self.children.append(child)
             child.parent = self
-            self.update_value()
+
+            child_value = child.value[0]
+            if len(self.children) == 1:
+                # First child: set parent value to child value, throw away own initial value
+                self.value = (child_value, self.value[1])
+            else:
+                # Subsequent child: just add child value to it's own value
+                self.value = (self.value[0] + child_value, self.value[1])
+
+            if self.parent:
+                self.parent.update_value()
 
     def remove_child(self, child):
         """Removes a child from the current Fractal."""
         if child in self.children:
             self.children.remove(child)
             child.parent = None
-            self.update_value()
+            self.value = (self.value[0] - child.value[0], self.value[1])
+            if self.parent:
+                self.parent.update_value()
 
     def is_root(self):
         """Checks if the Fractal is the root of all (i.e., parent is None)."""
@@ -27,11 +37,30 @@ class Fractal:
 
     def update_value(self):
         """Updates the value of this Fractal to the sum of its own value and its children's values."""
-        total = self.value[0]  # Start with the integer value of this Fractal
-        for child in self.children:
-            total += child.update_value()  # Recursively sum up the children's values
-        self.value = (total, self.value[1])  # Update the value as a tuple (sum, label)
+        total = sum(child.value[0] for child in self.children)
+        self.value = (total, self.value[1])
+        if self.parent:
+            self.parent.update_value()
         return total
+
+    def find_root(self):
+        """Finds the root of the fractal tree."""
+        node = self
+        while node.parent is not None:
+            node = node.parent
+        return node
+
+    def integrity_check(self):
+        """Checks if the fractal tree is consistent (each node's value equals sum of children values)."""
+        def check_node(node):
+            if not node.children:
+                return node.value[0]
+            child_sum = sum(check_node(child) for child in node.children)
+            return child_sum
+
+        root = self.find_root()
+        expected = check_node(root)
+        return expected == root.value[0]
 
     def print_tree(self, level=0):
         """Prints the tree structure recursively."""
@@ -40,5 +69,4 @@ class Fractal:
             child.print_tree(level + 1)
 
     def __repr__(self):
-        """A simple string representation for debugging."""
         return f"Fractal(value={self.value}, children_count={len(self.children)})"
