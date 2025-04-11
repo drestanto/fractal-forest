@@ -10,7 +10,7 @@ setup(
     description="A library for managing hierarchical numerical data structures",  # Short description
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",  # Format of the long description
-    url="https://github.com/drestanto/fractal-forest",  # Link to your project’s repository
+    url="https://github.com/drestanto/fractal-forest",  # Link to your project's repository
     license="MIT",  # Choose your license (MIT in this case)
     classifiers=[  # Classifiers help users find your project
         "Programming Language :: Python :: 3",  # Python 3 compatibility
