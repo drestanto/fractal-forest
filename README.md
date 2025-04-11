@@ -24,29 +24,25 @@ pip install fractal-forest
 ## Usage
 
 ```python
-from fractal_forest import Node, Tree
+# usage_example.py
+from fractal_forest import Fractal
 
-# Create the root node with a value (int, label)
-root = Node((10, "root"))
+# Create the root fractal
+root = Fractal((10, "root"))
 
-# Create children
-child1 = Node((5, "child1"))
-child2 = Node((7, "child2"))
+# Create child fractals
+child1 = Fractal((5, "child1"))
+child2 = Fractal((7, "child2"))
 
 # Add children to root
 root.add_child(child1)
 root.add_child(child2)
 
-# Add grandchild
-grandchild = Node((3, "grandchild"))
-child1.add_child(grandchild)
-
 # Print the tree
-tree = Tree(root)
-tree.print_tree()
+root.print_tree()
 
 # Access the updated value at root
-print(root.value)  # Output will be (25, 'root') after aggregation
+print(root.value)  # Output will be (22, 'root') after aggregation
 ```
 
 ## License
